@@ -1,0 +1,27 @@
+drop sequence "SPM_SEQ";
+drop table "SPM";
+
+
+create table SPM(
+		NUM number primary key,
+		NAME varchar2(100) not null ,
+		ID varchar2(50) not null,
+		PW varchar2(100) not null,
+		PHONE varchar2(20) not null,
+		BIRTH varchar2(40) not null,
+		EMAIL varchar2(30) not null,
+		ADDRESS1 varchar2(100) not null,
+		ADDRESS2 varchar2(100) not null,
+		NICKNAME varchar2(30) not null,
+		REGDATE date default sysdate);
+		
+create sequence SPM_SEQ
+	increment by 1
+	start with 1
+	minvalue 1
+	maxvalue 9999
+	nocycle
+	nocache
+	noorder
+
+		

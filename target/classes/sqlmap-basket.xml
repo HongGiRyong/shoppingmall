@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="basketDao">
+	<insert id="basketinsert" parameterType="basket">
+		insert into "BASKET" ("KARTNUM", "USERNUM", "ITEMCODE", "ITEMQTY","ITEMSIZE")
+		values (#{kartnum}, #{usernum}, #{itemcode}, #{itemqty}, #{itemsize})
+	</insert>
+
+	<select id="basketselect" parameterType="Long"
+		resultType="basket">
+		select * from "BASKET" where "USERNUM"=#{usernum}
+	</select>
+	<select id="basketList" parameterType="String" resultType="item">
+		select * from "ITEM" I 
+			inner join "ITEMOPTION" O
+				on I.ITEMCODE = O.ITEMCODE
+			where I."ITEMCODE"=#{itemcode} and O.ITEMSIZE = #{itemsize}
+	</select>
+	<select id="buycount" resultType="Long">
+		select count(*) from "ITEMBUY"
+	</select>
+	<insert id="basketbuyinsert" parameterType="basketbuy">
+		insert into "TBL_ORDER" ("ORDERID", "USERID", "ORDERREC", "ITEMCODE", "USERADDR1", "USERADDR2", "ORDERINFO", "ORDERPHON", "AMOUNT")
+		values (#{orderid}, #{userid}, #{orderrec}, #{itemcode}, #{useraddr1}, #{useraddr2}, #{orderinfo}, #{orderphon}, #{amount})
+	</insert>
+	<insert id="basketbuyinsert_sub" parameterType="basketbuy">
+		insert into "TBL_ORDER_DETAILS" ("ORDERID", "ITEMCODE", "ITEMSIZE", "ITEMQTY")
+		values (#{orderid}, #{itemcode}, #{itemsize}, #{itemqty})
+	</insert>
+	<insert id="itembuyinsert" parameterType="itembuy">
+		insert into "TBL_ORDER" ("ORDERID", "USERID", "ORDERREC", "ITEMCODE", "USERADDR1", "USERADDR2", "ORDERINFO", "ORDERPHON", "AMOUNT")
+		values (#{orderid}, #{userid}, #{orderrec}, #{itemcode}, #{useraddr1}, #{useraddr2}, #{orderinfo}, #{orderphon}, #{amount})
+	</insert>
+	<insert id="itembuyinsert_sub" parameterType="itembuy">
+		insert into "TBL_ORDER_DETAILS" ("ORDERID", "ITEMCODE", "ITEMSIZE", "ITEMQTY")
+		values (#{orderid}, #{itemcode}, #{itemsize}, #{itemqty})
+	</insert>
+	<delete id="basketdelete" parameterType="Long">
+		delete from "BASKET"
+		where "KARTNUM"=#{kartnum}
+	</delete>
+	<delete id="itemdelete" parameterType="Long">
+		delete from "BASKET" where
+		"ORDERID"=#{orderid}
+	</delete>
+	<select id="search" parameterType="HashMap" resultType="item">
+		select *
+		from "ITEM" where "ITEMCATECODE"=#{itemcatecode} and "ITEMNAME" like
+		'%'||#{search}||'%'
+	</select>
+	<select id="searchAll" parameterType="String" resultType="item">
+		select
+		* from "ITEM" where "ITEMNAME" like '%'||#{itemname}||'%'
+	</select>
+	<update id="plus" parameterType="Long">
+		update "BASKET" set
+		"ITEMQTY"=ITEMQTY +1 where "KARTNUM"=#{kartnum}
+	</update>
+	<update id="mius" parameterType="Long">
+		update "BASKET" set
+		"ITEMQTY"=ITEMQTY -1 where "KARTNUM"=#{kartnum}
+	</update>
+	<select id="basSelect" parameterType="Long" resultType="basket">
+		select *
+		from "BASKET" where "KARTNUM"=#{kartnum}
+	</select>
+	<update id="address" parameterType="basketbuy">
+		update "TBL_ORDER" set
+		"USERADDR1"=#{useraddr1}, "USERADDR2"=#{useraddr2}, "ORDERINFO"=#{orderinfo},"ORDERPHON"=#{orderphon} where "KARTNUM"=#{kartnum}
+	</update>
+	<select id="catelist" parameterType="String" resultType="item">
+		select *
+		from "ITEM" where "ITEMCATECODE"=#{catecode}
+	</select>
+	<select id="allList" resultType="item">
+		select * from "ITEM"
+	</select>
+	<select id="iteminfo" parameterType="String" resultType="item">
+		select * from "ITEM" where ITEMCODE = #{itemcode}
+	</select>
+	<select id="iteminfo_sub" parameterType="String" resultType="item">
+		select * from "ITEMOPTION" where ITEMCODE = #{itemcode}
+	</select>
+	<select id="allcount" resultType="Integer">
+		select count(*) from "ITEM"
+	</select>
+	<select id="keycount" parameterType="String" resultType="Integer">
+		select count(*) from "ITEM" where "ITEMNAME" like '%'||#{itemname}||'%'
+	</select>
+	<select id="keycatecount" parameterType="HashMap" resultType="Integer">
+		select count(*) from "ITEM" "ITEMCATECODE"=#{catecode} and "ITEMNAME" like
+		'%'||#{search}||'%'
+	</select>
+	<select id="catecount" parameterType="String" resultType="Integer">
+		select count(*) from "ITEM" where "ITEMCATECODE"=#{catecode}
+	</select>
+	<update id="itemqtyupdate" parameterType="String">
+		update "ITEMOPTION" set
+		"ITEMQTY"=ITEMQTY -1 where "ITEMCODE"=#{itemcode}
+	</update>
+	<select id="itemqtyselect" parameterType="String" resultType="qty">
+		select *
+		from "ITEMOPTION" where "ITEMCODE"=#{itemcode}
+	</select>
+	<update id="qtyupdate" parameterType="String">
+		update "ITEMOPTION" set
+		"ITEMQTY"=ITEMQTY +1 where "ITEMCODE"=#{itemcode}
+	</update>
+	
+</mapper>

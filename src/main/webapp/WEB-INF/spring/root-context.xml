@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+		
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="oracle.jdbc.OracleDriver"/>
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+		<property name="user" value="tester"/>
+		<property name="password" value="1234"/>
+		
+		<property name="maxPoolSize" value="100"/>
+		<property name="maxIdleTime" value="600"/>
+		<property name="idleConnectionTestPeriod" value="300"/>
+
+		</bean>
+		<!-- 네이버 메일 설정 -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />    <!-- 메이서버 호스트 -->
+		<property name="port" value="465" />     <!-- 메이서버 포트번호 -->
+		<property name="username" value="#" />     <!-- 자신의 이메일 아이디 -->
+		<property name="password" value="#" />     <!-- 자신의 비밀번호 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="protocol" value="smtps"/>
+		
+		<!-- 보안연결 SSL과 관련된 설정 -->
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtps.checkserveridentity">true</prop>
+				<prop key="mail.smtps.ssl.protocols">TLSv1.2</prop>
+				<prop key="mail.smtp.ssl.enable">true</prop>
+				<prop key="mail.smtps.ssl.trust">*</prop>
+			</props>
+		</property>
+	</bean>
+		
+		
+		
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:sqlmap-spm.xml</value>
+				<value>classpath:sqlmapper.xml</value>
+				<value>classpath:sqlmap-basket.xml</value>
+				
+			</list>
+		</property>
+	</bean>
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg ref="sqlSessionFactory"/>
+	</bean>
+	
+</beans>

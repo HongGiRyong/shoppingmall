@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name = "cacheEnabled" value="false"/>
+		<setting name = "useGeneratedKeys" value = "false"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="MemberDto" type="com.shoppingmall.web.memberDto.MemberDto"/>
+		<typeAlias alias="itemRegisterVo" type="com.shoppingmall.web.admin.model.ItemRegisterVo"/>
+		<typeAlias alias="memberManageVo" type="com.shoppingmall.web.admin.model.MemberManageVo"/>
+		<typeAlias alias="memberDetailVo" type="com.shoppingmall.web.admin.model.MemberDetailVo"/>
+		<typeAlias alias="itemRegisterVo" type="com.shoppingmall.web.admin.model.ItemRegisterVo"/>
+		<typeAlias type="com.shoppingmall.web.main.basket.BasketVo" alias="basket"/>
+		<typeAlias type="com.shoppingmall.web.main.item.ItemVo" alias="item"/>
+		<typeAlias type="com.shoppingmall.web.main.itemBuy.BasketBuyVo" alias="basketbuy"/>
+		<typeAlias type="com.shoppingmall.web.main.itemBuy.ItemBuyVo" alias="itembuy"/>
+		<typeAlias type="com.shoppingmall.web.main.item.ItemQtyVo" alias="qty"/>
+	</typeAliases>
+
+</configuration>
+		

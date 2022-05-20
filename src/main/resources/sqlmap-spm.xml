@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="spm">
+<!-- 회원가입 -->
+<insert id="register">
+	insert into MEMBER values 
+	(member_seq.nextval, #{name}, #{id}, #{pw}, #{phone}, #{birth}, #{email}, #{address1}, #{address2}, #{nickname}, 0 , SYSDATE)
+</insert>
+  	<!--  아이디 중복 체크  -->
+    <select id="idCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(id) FROM MEMBER WHERE id= #{id}
+    </select> 
+    
+    <!--  닉네임 중복 체크  -->
+    <select id="NickCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(nickname) FROM MEMBER WHERE nickname= #{nickname}
+    </select> 
+    
+      <!-- 이메일 중복 체크  -->
+    <select id="emailCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(email) FROM MEMBER WHERE email= #{email}
+    </select> 
+    
+   <!--로그인-->
+   <select id = "login" resultType="com.shoppingmall.web.memberDto.MemberDto"  >
+   SELECT NAME FROM MEMBER WHERE ID = #{id} AND PW = #{pw}
+   </select>
+   
+   <select id = "viewlogin" resultType="com.shoppingmall.web.memberDto.MemberDto" >
+   SELECT * FROM MEMBER where ID = #{id}
+   </select>
+   
+   <!-- 로그인시 아이디와 비밀번호 확인 -->
+	<select id="loginUser" resultType="com.shoppingmall.web.memberDto.MemberDto">
+		select * from MEMBER where id=#{id} and pw=#{pw}
+	</select>
+	
+	<select id="findId" resultType="com.shoppingmall.web.memberDto.MemberDto">
+		select * from MEMBER where name=#{name} and email=#{email}
+	</select>
+	
+	<select id="findPw" resultType="com.shoppingmall.web.memberDto.MemberDto">
+		select * from MEMBER where id=#{id} and name=#{name} and email=#{email}
+	</select>
+	
+	<update id="updatePw">
+		update MEMBER set pw = #{pw} where id = #{id}
+	</update>
+	
+	<!-- 내정보 조회 -->
+	   <select id="readmypage" resultType="com.shoppingmall.web.memberDto.MemberDto">
+	   	select * from MEMBER where ID = #{id} 
+	   </select>
+	   
+	 <!-- 내정보 수정 -->
+	 <update id="updatemypage">
+	 update MEMBER set name = #{name}, email = #{email}, pw = #{pw}, birth = #{birth}, address1=#{address1},address2=#{address2}  where id = #{id}
+	 </update>
+	 <!-- 비밀번호체크 -->
+	 <select id="pwCheck" resultType="String">
+	select PW from MEMBER where ID = #{id}
+	</select>
+	 <!-- 내정보 탈퇴 -->
+	 <delete id="deletemypage">
+	 	delete from MEMBER where id = #{id} 
+	 </delete>
+	 <!-- 내 정보 주문 조회 -->
+	 <select id="myorderlist" resultType="com.shoppingmall.web.admin.model.OrderDetailVo">
+ select * from tbl_order o 
+ 		inner join tbl_order_details d
+            on d.orderid = o.orderid
+                inner join item i 
+                    on i.itemcode = d.itemcode	
+ 						where o.userid = #{num}
+</select>
+
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+
+
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
+						/WEB-INF/spring/appServlet/security-context.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		<filter>
+		<filter-name>encodingFilter</filter-name><!--  필터이름 설정 -->
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<!--  스프링을 이용한 인코딩 방식 클래스 -->
+		<init-param>
+			<param-name>encoding</param-name><!--filter-name 의 속성중에 encoding 으로 UTF-8 적용-->
+			<param-value>utf-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+			<!--  forceEncoding의 값이 true 이면 encoding의 값을 HttpServletRequest, HttpServletResponse 
+				객체에 강제로 세팅해 준다. forceEncoding의 값이 false 이면 HttpServletRequest, HttpServletResponse 
+				객체의 값이 null 인 경우에만 encoding의 값으로 세팅해 준다. -->
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name><!--  위에 filter-name 을 가지고 매핑 -->
+		<url-pattern>/*</url-pattern><!-- 모든 요청에 의미리 가지고 있다. 모든 요청에 인코등 적용 -->
+	</filter-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+
+	
+</web-app>

@@ -1,0 +1,16 @@
+git 사용법
+
+1.git 다운로드 후 git bash 열기
+2.git config --global user.name "your_name"치기(본인 영어이름)
+3.git config --global user.email "your_email"치기(본인깃허브가입이메일치기)
+4.git config --list (본인꺼 잘들어갔나 확인)
+
+프로젝트 우클릭 코드나 베쉬로 열기
+1.git init (깃파일 만들기)
+2. git add . (모든파일 더하기)
+3. git status (새로운 파일들 올려주기)
+4. git commit -m "first commit" (파일같은거)
+5.git remote add origin 본인깃연결고리주소
+(깃 연결하는부분)
+6. git remote -v (잘 연결됐는지 확인)
+7. git push origin master (연결!!! 되면 성공)   

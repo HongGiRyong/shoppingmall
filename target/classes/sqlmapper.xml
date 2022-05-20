@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MemberManageDaoImpl">
+
+<select id="memberInfoAll" resultType="memberManageVo">
+	select * from MEMBER order by NUM
+</select>
+	 
+<select id="memberSearch" resultType="memberManageVo" parameterType="com.shoppingmall.web.admin.model.MemberSearchVo">
+	select * from MEMBER where '${select}' like '%'||'${search}'||'%'
+</select>
+
+<select id="memberDetail_sub" resultType="memberManageVo">
+	select * from MEMBER where NUM = #{num}
+</select>
+
+<select id="memberDetail" resultType="memberDetailVo">
+	select * from MEMBER M 
+		inner join TBL_ORDER O 
+			on M.NUM = O.USERID
+				where M.NUM = #{num}
+</select>
+
+<select id="withdrawalMemberSearch" resultType="memberManageVo">
+	select * from MEMBER where ID = #{id}
+</select>
+
+<insert id="withdrawalMemberReg">
+	insert into WITHDRAWALMEMBER values (#{num}, #{name}, #{id}, #{pw}, #{phone}, #{birth}, #{email}, #{address1}, #{address2}, #{nickName}, sysdate)
+</insert>
+
+<select id="withdrawalMemberAllList" resultType="memberManageVo">
+	select * from WITHDRAWALMEMBER order by NUM
+</select>
+
+<delete id="memberDelete">
+	delete from MEMBER where ID = #{id} and ADMIN = 0
+</delete>
+
+<insert id="itemRegister">
+	insert all into ITEM values (#{itemCode}, #{itemPrice}, #{itemName}, #{itemDesc}, #{itemCateCode}, #{itemImage}, #{itemThumbImage})
+	into ITEMOPTION values (#{itemCode}, #{itemSize}, #{itemQty}) select * from dual
+</insert>
+
+<insert id="itemRegister_option">
+	insert into ITEMOPTION (ITEMCODE, ITEMSIZE, ITEMQTY) values (#{itemCode}, #{itemSize}, #{itemQty})
+</insert>
+
+<select id="itemAddList" resultType="com.shoppingmall.web.admin.model.ItemAddListVo">
+	select O.ITEMCODE, O.ITEMSIZE, O.ITEMQTY from ITEM I
+		inner join ITEMOPTION O
+			on I.ITEMCODE = O.ITEMCODE
+				where I.ITEMCODE = #{itemCode}
+</select>
+
+<select id="itemSize" resultType="Integer">
+	select count(*) ITEMSIZE from ITEMOPTION where ITEMSIZE = #{itemSize}
+</select>
+
+<select id="itemList" resultType="itemRegisterVo">
+	select * from ITEM I
+		inner join ITEMOPTION O
+			on I.ITEMCODE = O.ITEMCODE
+</select>
+
+<select id="itemSearch" resultType="itemRegisterVo">
+	select * from ITEM where #{select} like '%'||#{search}||'%' order by ITEMCODE
+</select>
+
+<update id="itemUpdate_1">
+	update ITEM set ITEMPRICE = #{itemPrice}, ITEMNAME = #{itemName}, ITEMDESC = #{itemDesc}, ITEMIMAGE = #{itemImage}, ITEMTHUMBIMAGE = #{itemThumbImage} 
+		where ITEMCODE = #{itemCode}
+</update>
+
+<update id="itemUpdate_2">
+	update ITEMOPTION set ITEMSIZE = #{itemSize}, ITEMQTY = #{itemQty} where ITEMCODE = #{itemCode} and ITEMSIZE = #{itemOldSize}
+</update>
+
+<select id="itemDetail" resultType="itemRegisterVo">
+	select * from ITEM I 
+		inner join ITEMOPTION O
+			on I.ITEMCODE = O.ITEMCODE
+				where I.ITEMCODE = #{itemCode} and O.ITEMSIZE = #{itemSize}
+</select>
+
+<select id="itemName" resultType="Integer">
+	select count(*) ITEMNAME from ITEM where ITEMNAME = #{itemName}
+</select>
+
+<delete id="itemDelete">
+	delete from ITEM where ITEMCODE = #{itemCode}
+</delete>
+
+<delete id="itemDelete_option">
+	delete from ITEMOPTION where ITEMCODE = #{itemCode} and ITEMSIZE = #{itemSize}
+</delete>
+
+<select id="itemCount" resultType="Integer">
+	select count(*) from ITEMOPTION where ITEMCODE = #{itemCode}
+</select>
+
+<select id="orderList" resultType="com.shoppingmall.web.admin.model.OrderListVo">
+ 	select * from tbl_order where DELIVERY = '배송 중' or DELIVERY = '배송준비' 
+</select>
+
+<select id="orderCompleteList" resultType="com.shoppingmall.web.admin.model.OrderListVo">
+ 	select * from tbl_order where DELIVERY = '배송 완료'
+</select>
+
+<select id="orderDetail" resultType="com.shoppingmall.web.admin.model.OrderDetailVo">
+ select * from tbl_order o 
+ 		inner join tbl_order_details d
+            on d.orderid = o.orderid
+                inner join item i 
+                    on i.itemcode = d.itemcode	
+ 						where o.orderid = #{orderId}
+</select>
+
+<update id="orderDelivery">
+	update tbl_order set DELIVERY = #{delivery} where ORDERID = #{orderId}  
+</update>
+
+<select id="orderQtyChange_sub" resultType="com.shoppingmall.web.admin.model.OrderDetailVo">
+ 	select ITEMCODE, ITEMQTY, ITEMSIZE from tbl_order_details where ORDERID = #{orderId}
+</select>
+
+<update id="orderQtyChange">
+	update ITEMOPTION set ITEMQTY = ITEMQTY ${delivery} #{itemQty} where ITEMCODE = #{itemCode} and ITEMSIZE = #{itemSize} 
+</update>
+
+
+</mapper>
+
+
+
+
+
